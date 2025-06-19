@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, Zap, ArrowRight, Clock, Users, Rocket } from 'lucide-react';
@@ -6,116 +5,257 @@ import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+const waitlistSchema = z.object({
+  email: z.string().email({ message: 'Please enter a valid email address.' }),
+});
+
+type WaitlistForm = z.infer<typeof waitlistSchema>;
 
 const Index = () => {
-  const [email, setEmail] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<WaitlistForm>({
+    resolver: zodResolver(waitlistSchema),
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: WaitlistForm) => {
     setIsLoading(true);
-    
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Simulate posting to dummy API endpoint
+      // await fetch('https://dummyapi.io/waitlist', { method: 'POST', body: JSON.stringify(data) });
       toast({
-        title: "Welcome to the waitlist!",
+        title: 'Welcome to the waitlist!',
         description: "We'll notify you when VoidGrid launches.",
       });
-      setEmail('');
+      reset();
+    } catch (err) {
+      toast({
+        title: 'Something went wrong',
+        description: 'Please try again later.',
+        variant: 'destructive',
+      });
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden" aria-label="Hero">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-green-500/10" />
-        
         <div className="relative z-10 max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           {/* Launch Badge */}
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-8 animate-fade-in">
             <Clock className="w-4 h-4 mr-2" />
             Launching Soon
           </div>
-
           {/* Main Heading */}
           <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">
             <span className="text-gradient">Hosting</span>
             <br />
             <span className="text-white">Beyond the Surface</span>
           </h1>
-
           {/* Subtitle */}
           <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto animate-fade-in">
-            VoidGrid is the next-generation hosting platform offering effortless deployment, 
-            blazing speed, and intelligent control.
+            Effortless deployment. Blazing speed. Intelligent control.<br />
+            <span className="text-primary font-semibold">VoidGrid</span> is the next-generation hosting platform for modern developers and ambitious teams.
           </p>
-
           {/* Waitlist Form */}
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto mb-12 animate-fade-in">
-            <Input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 bg-background/50 border-white/20 text-white placeholder:text-gray-400"
-              required
-            />
+          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto mb-12 animate-fade-in" aria-label="Waitlist Form" noValidate>
+            <div className="w-full">
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                className="flex-1 bg-background/50 border-border text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 transition-all duration-200"
+                aria-label="Email address"
+                {...register('email')}
+                disabled={isLoading}
+              />
+              {errors.email && (
+                <p className="text-sm text-destructive mt-1" aria-live="polite">{errors.email.message}</p>
+              )}
+            </div>
             <Button 
               type="submit" 
               disabled={isLoading}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground px-8"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 transition-all duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              aria-label="Join Waitlist"
             >
               {isLoading ? 'Joining...' : 'Join Waitlist'}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </form>
-
           {/* CTA Links */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in">
             <Link 
               to="/features" 
-              className="inline-flex items-center text-primary hover:text-primary/80 transition-colors"
+              className="inline-flex items-center text-primary hover:text-primary/80 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               Explore Features
               <ChevronRight className="ml-1 h-4 w-4" />
             </Link>
             <Link 
               to="/roadmap" 
-              className="inline-flex items-center text-muted-foreground hover:text-white transition-colors"
+              className="inline-flex items-center text-muted-foreground hover:text-foreground transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               View Roadmap
               <ChevronRight className="ml-1 h-4 w-4" />
             </Link>
           </div>
         </div>
-
         {/* Floating Elements */}
         <div className="absolute top-1/4 left-10 w-20 h-20 bg-primary/10 rounded-full blur-xl animate-float" />
         <div className="absolute bottom-1/4 right-10 w-32 h-32 bg-green-500/10 rounded-full blur-xl animate-float" style={{ animationDelay: '1s' }} />
       </section>
 
-      {/* Stats Section */}
-      <section className="py-20 border-t border-white/10">
+      {/* Features Section */}
+      <section className="py-20 border-t border-white/10 bg-background/80" aria-label="Features">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-foreground">Why Choose VoidGrid?</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center glass-card p-8 hover:glow-effect transition-all duration-300">
-              <Zap className="h-12 w-12 text-primary mx-auto mb-4" />
+            <div className="text-center glass-card p-8 hover:glow-effect transition-all duration-300 focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2">
+              <Zap className="h-12 w-12 text-primary mx-auto mb-4 animate-bounce" />
               <h3 className="text-2xl font-bold text-white mb-2">Lightning Fast</h3>
-              <p className="text-muted-foreground">Deploy in seconds with our optimized infrastructure</p>
+              <p className="text-muted-foreground">Deploy in seconds with our optimized edge infrastructure.</p>
             </div>
-            <div className="text-center glass-card p-8 hover:glow-effect transition-all duration-300">
-              <Users className="h-12 w-12 text-primary mx-auto mb-4" />
+            <div className="text-center glass-card p-8 hover:glow-effect transition-all duration-300 focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2">
+              <Users className="h-12 w-12 text-primary mx-auto mb-4 animate-pulse" />
               <h3 className="text-2xl font-bold text-white mb-2">Developer First</h3>
-              <p className="text-muted-foreground">Built by developers, for developers</p>
+              <p className="text-muted-foreground">Built by developers, for developers. Git deploy, CLI, and more.</p>
             </div>
-            <div className="text-center glass-card p-8 hover:glow-effect transition-all duration-300">
-              <Rocket className="h-12 w-12 text-primary mx-auto mb-4" />
+            <div className="text-center glass-card p-8 hover:glow-effect transition-all duration-300 focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2">
+              <Rocket className="h-12 w-12 text-primary mx-auto mb-4 animate-spin-slow" />
               <h3 className="text-2xl font-bold text-white mb-2">Scale Ready</h3>
-              <p className="text-muted-foreground">From prototype to production, seamlessly</p>
+              <p className="text-muted-foreground">From prototype to production, scale seamlessly with zero downtime.</p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How it Works Section */}
+      <section className="py-20 border-t border-white/10" aria-label="How it Works">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-foreground">How VoidGrid Works</h2>
+          <ol className="grid grid-cols-1 md:grid-cols-3 gap-8 list-decimal list-inside">
+            <li className="glass-card p-8 text-center">
+              <span className="block text-4xl mb-4">🚀</span>
+              <h3 className="text-xl font-semibold mb-2">Connect Your Repo</h3>
+              <p className="text-muted-foreground">Link your GitHub or GitLab repository in seconds.</p>
+            </li>
+            <li className="glass-card p-8 text-center">
+              <span className="block text-4xl mb-4">⚡</span>
+              <h3 className="text-xl font-semibold mb-2">Configure & Deploy</h3>
+              <p className="text-muted-foreground">Set your build settings and deploy with a single click.</p>
+            </li>
+            <li className="glass-card p-8 text-center">
+              <span className="block text-4xl mb-4">🌐</span>
+              <h3 className="text-xl font-semibold mb-2">Scale Instantly</h3>
+              <p className="text-muted-foreground">Your app is live on the edge, ready to scale globally.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      {/* Dashboard Preview Section */}
+      <section className="py-20 border-t border-white/10 bg-background/80" aria-label="Dashboard Preview">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-foreground">Preview the Dashboard</h2>
+          <p className="text-muted-foreground mb-8">Intuitive, powerful, and beautiful. Manage your projects, deployments, and analytics in one place.</p>
+          <div className="flex justify-center">
+            <img src="/images/dashboard-preview.png" alt="VoidGrid Dashboard Preview" className="rounded-xl shadow-2xl border border-white/10 max-w-full w-[700px] h-auto animate-fade-in" style={{ minHeight: 320 }} />
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Table Section */}
+      <section className="py-20 border-t border-white/10" aria-label="Pricing">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-foreground">VoidGrid Pricing Table</h2>
+          <div className="overflow-x-auto">
+            <table className="min-w-full border-collapse rounded-xl overflow-hidden text-sm md:text-base">
+              <thead>
+                <tr className="bg-primary/10 text-primary">
+                  <th className="p-4 font-bold text-left">Plan Name</th>
+                  <th className="p-4 font-bold text-left">EdgeStarter (Free)</th>
+                  <th className="p-4 font-bold text-left">EdgeCore (Starter Paid)</th>
+                  <th className="p-4 font-bold text-left">PulseGrid (Mid Tier)</th>
+                  <th className="p-4 font-bold text-left">InfinityForge (Power Users)</th>
+                </tr>
+              </thead>
+              <tbody className="bg-background/80">
+                <tr><td className="p-4 font-semibold">Price</td><td className="p-4">Free</td><td className="p-4">$1.50 / month</td><td className="p-4">$4.50 / month</td><td className="p-4">$8.00 / month</td></tr>
+                <tr><td className="p-4 font-semibold">CPU</td><td className="p-4">0.3 vCPU (Shared)</td><td className="p-4">0.5 vCPU (Shared)</td><td className="p-4">1 vCPU (Shared)</td><td className="p-4">1.5 vCPU (Shared)</td></tr>
+                <tr><td className="p-4 font-semibold">Memory (RAM)</td><td className="p-4">256 MB</td><td className="p-4">512 MB</td><td className="p-4">1 GB</td><td className="p-4">2 GB</td></tr>
+                <tr><td className="p-4 font-semibold">Storage</td><td className="p-4">500 MB SSD</td><td className="p-4">2 GB SSD</td><td className="p-4">10 GB SSD</td><td className="p-4">25 GB SSD</td></tr>
+                <tr><td className="p-4 font-semibold">Bandwidth</td><td className="p-4">5 GB / Month</td><td className="p-4">20 GB / Month</td><td className="p-4">100 GB / Month</td><td className="p-4">500 GB / Month</td></tr>
+                <tr><td className="p-4 font-semibold">Database</td><td className="p-4">1 Shared MongoDB (Limited)</td><td className="p-4">1 Shared MongoDB</td><td className="p-4">1 Dedicated MongoDB</td><td className="p-4">Multi-DB Support</td></tr>
+                <tr><td className="p-4 font-semibold">Custom Domain</td><td className="p-4">Not Available</td><td className="p-4">Available</td><td className="p-4">Available</td><td className="p-4">Available</td></tr>
+                <tr><td className="p-4 font-semibold">Build Minutes</td><td className="p-4">300 min / Month</td><td className="p-4">600 min / Month</td><td className="p-4">1200 min / Month</td><td className="p-4">Unlimited</td></tr>
+                <tr><td className="p-4 font-semibold">Auto-Sleep</td><td className="p-4">15 min inactivity</td><td className="p-4">30 min inactivity</td><td className="p-4">No Sleep</td><td className="p-4">No Sleep</td></tr>
+                <tr><td className="p-4 font-semibold">Cold Start</td><td className="p-4">~10s</td><td className="p-4">~5s</td><td className="p-4">Near-Instant</td><td className="p-4">Instant</td></tr>
+                <tr><td className="p-4 font-semibold">SSL/HTTPS</td><td className="p-4">Included</td><td className="p-4">Included</td><td className="p-4">Included</td><td className="p-4">Included</td></tr>
+                <tr><td className="p-4 font-semibold">Git Deploy</td><td className="p-4">Included</td><td className="p-4">Included</td><td className="p-4">Included</td><td className="p-4">Included</td></tr>
+                <tr><td className="p-4 font-semibold">Monitoring</td><td className="p-4">Basic</td><td className="p-4">Basic</td><td className="p-4">Advanced</td><td className="p-4">Advanced</td></tr>
+                <tr><td className="p-4 font-semibold">Support</td><td className="p-4">Community</td><td className="p-4">Email Support</td><td className="p-4">Priority Email Support</td><td className="p-4">Priority + Dedicated Support</td></tr>
+                <tr><td className="p-4 font-semibold">Use Case</td><td className="p-4">Hobby, Portfolio, Experiments</td><td className="p-4">Small Projects, Early Stage Startups</td><td className="p-4">Growing Apps, Production Workloads</td><td className="p-4">High-Traffic, Resource-Intensive Projects</td></tr>
+              </tbody>
+            </table>
+            <p className="text-xs text-muted-foreground mt-4">Note: This is a draft. Features and pricing may change before launch.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-20 border-t border-white/10 bg-background/80" aria-label="FAQ">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-foreground">Frequently Asked Questions</h2>
+          <div className="space-y-6">
+            <details className="glass-card p-6 group" open>
+              <summary className="cursor-pointer text-lg font-semibold text-primary group-open:text-white transition-colors">What is VoidGrid?</summary>
+              <p className="mt-2 text-muted-foreground">VoidGrid is a next-generation hosting platform designed for speed, simplicity, and scalability. Deploy your apps to the edge in seconds.</p>
+            </details>
+            <details className="glass-card p-6 group">
+              <summary className="cursor-pointer text-lg font-semibold text-primary group-open:text-white transition-colors">How do I join the waitlist?</summary>
+              <p className="mt-2 text-muted-foreground">Simply enter your email in the waitlist form above and you'll be notified when we launch.</p>
+            </details>
+            <details className="glass-card p-6 group">
+              <summary className="cursor-pointer text-lg font-semibold text-primary group-open:text-white transition-colors">Can I use a custom domain?</summary>
+              <p className="mt-2 text-muted-foreground">Custom domains are available on paid plans. See the pricing table for details.</p>
+            </details>
+            <details className="glass-card p-6 group">
+              <summary className="cursor-pointer text-lg font-semibold text-primary group-open:text-white transition-colors">What databases are supported?</summary>
+              <p className="mt-2 text-muted-foreground">We support MongoDB out of the box, with more databases coming soon.</p>
+            </details>
+            <details className="glass-card p-6 group">
+              <summary className="cursor-pointer text-lg font-semibold text-primary group-open:text-white transition-colors">Is there a free plan?</summary>
+              <p className="mt-2 text-muted-foreground">Yes! EdgeStarter is our free tier, perfect for hobby projects and experiments.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      {/* Polish & Delight Section */}
+      <section className="py-20 border-t border-white/10" aria-label="Polish and Delight">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-foreground">Built to Delight</h2>
+          <p className="text-muted-foreground mb-8">Enjoy microinteractions, beautiful gradients, and a smooth, modern experience. We obsess over the details so you can focus on building.</p>
+          <div className="flex flex-wrap gap-4 justify-center items-center">
+            <span className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium animate-bounce">✨ Microinteractions</span>
+            <span className="inline-flex items-center px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-sm font-medium animate-pulse">🎨 Gradients</span>
+            <span className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white text-sm font-medium animate-fade-in">⚡ Fast Loads</span>
+            <span className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium animate-spin-slow">🛸 Modern UI</span>
           </div>
         </div>
       </section>

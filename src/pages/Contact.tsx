@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
@@ -6,36 +5,51 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Mail, MessageSquare, Send, Github, Twitter, Linkedin } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+const contactSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  email: z.string().email('Please enter a valid email address'),
+  message: z.string().min(1, 'Message is required'),
+});
+
+type ContactForm = z.infer<typeof contactSchema>;
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
-  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<ContactForm>({
+    resolver: zodResolver(contactSchema),
+  });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: ContactForm) => {
     setIsLoading(true);
-    
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Simulate posting to dummy API endpoint
+      // await fetch('https://dummyapi.io/contact', { method: 'POST', body: JSON.stringify(data) });
       toast({
-        title: "Message sent successfully!",
+        title: 'Message sent successfully!',
         description: "We'll get back to you within 24 hours.",
       });
-      setFormData({ name: '', email: '', message: '' });
+      reset();
+    } catch (err) {
+      toast({
+        title: 'Something went wrong',
+        description: 'Please try again later.',
+        variant: 'destructive',
+      });
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -62,7 +76,7 @@ const Contact = () => {
                   <h2 className="text-2xl font-bold text-white">Send us a message</h2>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-white mb-2">
                       Your Name
@@ -70,13 +84,15 @@ const Contact = () => {
                     <Input
                       type="text"
                       id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
+                      {...register('name')}
                       placeholder="Enter your full name"
-                      className="bg-background/50 border-white/20 text-white placeholder:text-gray-400"
+                      className="bg-background/50 border-border text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 transition-all duration-200"
                       required
+                      disabled={isLoading}
                     />
+                    {errors.name && (
+                      <p className="text-sm text-destructive mt-1" aria-live="polite">{errors.name.message}</p>
+                    )}
                   </div>
 
                   <div>
@@ -86,13 +102,15 @@ const Contact = () => {
                     <Input
                       type="email"
                       id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
+                      {...register('email')}
                       placeholder="Enter your email address"
-                      className="bg-background/50 border-white/20 text-white placeholder:text-gray-400"
+                      className="bg-background/50 border-border text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 transition-all duration-200"
                       required
+                      disabled={isLoading}
                     />
+                    {errors.email && (
+                      <p className="text-sm text-destructive mt-1" aria-live="polite">{errors.email.message}</p>
+                    )}
                   </div>
 
                   <div>
@@ -101,20 +119,22 @@ const Contact = () => {
                     </label>
                     <Textarea
                       id="message"
-                      name="message"
-                      value={formData.message}
-                      onChange={handleChange}
+                      {...register('message')}
                       placeholder="Tell us about your project or questions..."
                       rows={5}
-                      className="bg-background/50 border-white/20 text-white placeholder:text-gray-400"
+                      className="bg-background/50 border-border text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 transition-all duration-200"
                       required
+                      disabled={isLoading}
                     />
+                    {errors.message && (
+                      <p className="text-sm text-destructive mt-1" aria-live="polite">{errors.message.message}</p>
+                    )}
                   </div>
 
                   <Button 
                     type="submit" 
                     disabled={isLoading}
-                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                   >
                     {isLoading ? 'Sending...' : 'Send Message'}
                     <Send className="ml-2 h-4 w-4" />
