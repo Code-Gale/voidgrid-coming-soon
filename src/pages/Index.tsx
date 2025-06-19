@@ -12,6 +12,16 @@ import { useToast } from '@/hooks/use-toast';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import PricingCalculator from '@/components/PricingCalculator';
+import FeatureComparison from '@/components/FeatureComparison';
+import InteractiveTimeline from '@/components/InteractiveTimeline';
+import SocialSharing from '@/components/SocialSharing';
+import LeadScoring from '@/components/LeadScoring';
+import CommunityStats from '@/components/CommunityStats';
+import TypingAnimation from '@/components/TypingAnimation';
+import ProgressBar from '@/components/ProgressBar';
+import LoadingSkeleton from '@/components/LoadingSkeleton';
+import ThreeDCard from '@/components/3DCard';
 
 const waitlistSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address.' }),
@@ -281,6 +291,91 @@ const Index = () => {
                 <summary className="cursor-pointer text-lg font-semibold text-primary group-open:text-white transition-colors">Is there a free plan?</summary>
                 <p className="mt-2 text-muted-foreground">Yes! EdgeStarter is our free tier, perfect for hobby projects and experiments.</p>
               </details>
+            </div>
+          </div>
+        </section>
+      </AnimatedSection>
+
+      {/* Community Stats Section */}
+      <AnimatedSection>
+        <CommunityStats />
+      </AnimatedSection>
+
+      {/* Pricing Calculator Section */}
+      <AnimatedSection>
+        <PricingCalculator />
+      </AnimatedSection>
+
+      {/* Feature Comparison Section */}
+      <AnimatedSection>
+        <FeatureComparison />
+      </AnimatedSection>
+
+      {/* Interactive Timeline Section */}
+      <AnimatedSection>
+        <InteractiveTimeline />
+      </AnimatedSection>
+
+      {/* Social Sharing Section */}
+      <AnimatedSection>
+        <SocialSharing />
+      </AnimatedSection>
+
+      {/* Lead Scoring Section */}
+      <AnimatedSection>
+        <LeadScoring />
+      </AnimatedSection>
+
+      {/* Typing Animation Demo */}
+      <AnimatedSection>
+        <section className="py-20 border-t border-border bg-background/80" aria-label="Typing Demo">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-foreground">See VoidGrid in Action</h2>
+            <TypingAnimation />
+          </div>
+        </section>
+      </AnimatedSection>
+
+      {/* 3D Card Demo */}
+      <AnimatedSection>
+        <section className="py-20 border-t border-border" aria-label="3D Cards">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-foreground">Interactive Experience</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <ThreeDCard
+                title="Lightning Fast"
+                description="Deploy in seconds with our optimized edge infrastructure."
+                icon="⚡"
+              />
+              <ThreeDCard
+                title="Developer First"
+                description="Built by developers, for developers. Git deploy, CLI, and more."
+                icon="👨‍💻"
+              />
+              <ThreeDCard
+                title="Scale Ready"
+                description="From prototype to production, scale seamlessly with zero downtime."
+                icon="🚀"
+              />
+            </div>
+          </div>
+        </section>
+      </AnimatedSection>
+
+      {/* Progress Bar Demo */}
+      <AnimatedSection>
+        <section className="py-20 border-t border-border bg-background/80" aria-label="Progress Demo">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 text-foreground">Loading Experience</h2>
+            <div className="space-y-8">
+              <div>
+                <h3 className="text-lg font-semibold mb-4 text-foreground">Deployment Progress</h3>
+                <ProgressBar progress={75} label="Building application..." />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold mb-4 text-foreground">Loading Skeleton</h3>
+                <LoadingSkeleton />
+              </div>
             </div>
           </div>
         </section>
