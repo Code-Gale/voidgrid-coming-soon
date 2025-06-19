@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, Zap, ArrowRight, Clock, Users, Rocket } from 'lucide-react';
 import Layout from '@/components/Layout';
+import Countdown from '@/components/Countdown';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
@@ -32,8 +33,6 @@ const Index = () => {
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      // Simulate posting to dummy API endpoint
-      // await fetch('https://dummyapi.io/waitlist', { method: 'POST', body: JSON.stringify(data) });
       toast({
         title: 'Welcome to the waitlist!',
         description: "We'll notify you when VoidGrid launches.",
@@ -58,22 +57,28 @@ const Index = () => {
         <div className="relative z-10 max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           {/* Launch Badge */}
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-8 animate-fade-in">
-            <Clock className="w-4 h-4 mr-2" />
+            <Clock className="w-4 h-4 mr-2 animate-pulse-slow" />
             Launching Soon
           </div>
           {/* Main Heading */}
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in-up">
             <span className="text-gradient">Hosting</span>
             <br />
-            <span className="text-white">Beyond the Surface</span>
+            <span className="text-foreground">Beyond the Surface</span>
           </h1>
           {/* Subtitle */}
-          <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto animate-fade-in">
+          <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto animate-fade-in" style={{ animationDelay: '0.2s' }}>
             Effortless deployment. Blazing speed. Intelligent control.<br />
             <span className="text-primary font-semibold">VoidGrid</span> is the next-generation hosting platform for modern developers and ambitious teams.
           </p>
+          
+          {/* Countdown Timer */}
+          <div className="mb-12" style={{ animationDelay: '0.4s' }}>
+            <Countdown />
+          </div>
+
           {/* Waitlist Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto mb-12 animate-fade-in" aria-label="Waitlist Form" noValidate>
+          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto mb-12 animate-fade-in" style={{ animationDelay: '0.6s' }} aria-label="Waitlist Form" noValidate>
             <div className="w-full">
               <Input
                 type="email"
@@ -90,28 +95,29 @@ const Index = () => {
             <Button 
               type="submit" 
               disabled={isLoading}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 transition-all duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 transition-all duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 hover:shadow-lg hover:shadow-primary/25"
               aria-label="Join Waitlist"
             >
               {isLoading ? 'Joining...' : 'Join Waitlist'}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </form>
+          
           {/* CTA Links */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in" style={{ animationDelay: '0.8s' }}>
             <Link 
               to="/features" 
-              className="inline-flex items-center text-primary hover:text-primary/80 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="inline-flex items-center text-primary hover:text-primary/80 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 group"
             >
               Explore Features
-              <ChevronRight className="ml-1 h-4 w-4" />
+              <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link 
               to="/roadmap" 
-              className="inline-flex items-center text-muted-foreground hover:text-foreground transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="inline-flex items-center text-muted-foreground hover:text-foreground transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 group"
             >
               View Roadmap
-              <ChevronRight className="ml-1 h-4 w-4" />
+              <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
         </div>
@@ -121,23 +127,23 @@ const Index = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 border-t border-white/10 bg-background/80" aria-label="Features">
+      <section className="py-20 border-t border-border bg-background/80" aria-label="Features">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-foreground">Why Choose VoidGrid?</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-foreground animate-fade-in-up">Why Choose VoidGrid?</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center glass-card p-8 hover:glow-effect transition-all duration-300 focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2">
-              <Zap className="h-12 w-12 text-primary mx-auto mb-4 animate-bounce" />
-              <h3 className="text-2xl font-bold text-white mb-2">Lightning Fast</h3>
+            <div className="text-center glass-card p-8 hover:glow-effect transition-all duration-300 focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 animate-fade-in-up group hover:scale-105" style={{ animationDelay: '0.1s' }}>
+              <Zap className="h-12 w-12 text-primary mx-auto mb-4 animate-bounce-slow group-hover:animate-glow" />
+              <h3 className="text-2xl font-bold text-foreground mb-2">Lightning Fast</h3>
               <p className="text-muted-foreground">Deploy in seconds with our optimized edge infrastructure.</p>
             </div>
-            <div className="text-center glass-card p-8 hover:glow-effect transition-all duration-300 focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2">
-              <Users className="h-12 w-12 text-primary mx-auto mb-4 animate-pulse" />
-              <h3 className="text-2xl font-bold text-white mb-2">Developer First</h3>
+            <div className="text-center glass-card p-8 hover:glow-effect transition-all duration-300 focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 animate-fade-in-up group hover:scale-105" style={{ animationDelay: '0.2s' }}>
+              <Users className="h-12 w-12 text-primary mx-auto mb-4 animate-pulse-slow group-hover:animate-glow" />
+              <h3 className="text-2xl font-bold text-foreground mb-2">Developer First</h3>
               <p className="text-muted-foreground">Built by developers, for developers. Git deploy, CLI, and more.</p>
             </div>
-            <div className="text-center glass-card p-8 hover:glow-effect transition-all duration-300 focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2">
-              <Rocket className="h-12 w-12 text-primary mx-auto mb-4 animate-spin-slow" />
-              <h3 className="text-2xl font-bold text-white mb-2">Scale Ready</h3>
+            <div className="text-center glass-card p-8 hover:glow-effect transition-all duration-300 focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 animate-fade-in-up group hover:scale-105" style={{ animationDelay: '0.3s' }}>
+              <Rocket className="h-12 w-12 text-primary mx-auto mb-4 animate-float group-hover:animate-glow" />
+              <h3 className="text-2xl font-bold text-foreground mb-2">Scale Ready</h3>
               <p className="text-muted-foreground">From prototype to production, scale seamlessly with zero downtime.</p>
             </div>
           </div>
@@ -145,7 +151,7 @@ const Index = () => {
       </section>
 
       {/* How it Works Section */}
-      <section className="py-20 border-t border-white/10" aria-label="How it Works">
+      <section className="py-20 border-t border-border" aria-label="How it Works">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-foreground">How VoidGrid Works</h2>
           <ol className="grid grid-cols-1 md:grid-cols-3 gap-8 list-decimal list-inside">
@@ -169,7 +175,7 @@ const Index = () => {
       </section>
 
       {/* Dashboard Preview Section */}
-      <section className="py-20 border-t border-white/10 bg-background/80" aria-label="Dashboard Preview">
+      <section className="py-20 border-t border-border bg-background/80" aria-label="Dashboard Preview">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-8 text-foreground">Preview the Dashboard</h2>
           <p className="text-muted-foreground mb-8">Intuitive, powerful, and beautiful. Manage your projects, deployments, and analytics in one place.</p>
@@ -180,7 +186,7 @@ const Index = () => {
       </section>
 
       {/* Pricing Table Section */}
-      <section className="py-20 border-t border-white/10" aria-label="Pricing">
+      <section className="py-20 border-t border-border" aria-label="Pricing">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-foreground">VoidGrid Pricing Table</h2>
           <div className="overflow-x-auto">
@@ -218,7 +224,7 @@ const Index = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 border-t border-white/10 bg-background/80" aria-label="FAQ">
+      <section className="py-20 border-t border-border bg-background/80" aria-label="FAQ">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-foreground">Frequently Asked Questions</h2>
           <div className="space-y-6">
@@ -247,7 +253,7 @@ const Index = () => {
       </section>
 
       {/* Polish & Delight Section */}
-      <section className="py-20 border-t border-white/10" aria-label="Polish and Delight">
+      <section className="py-20 border-t border-border" aria-label="Polish and Delight">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-8 text-foreground">Built to Delight</h2>
           <p className="text-muted-foreground mb-8">Enjoy microinteractions, beautiful gradients, and a smooth, modern experience. We obsess over the details so you can focus on building.</p>
