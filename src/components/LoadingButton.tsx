@@ -7,35 +7,36 @@ interface LoadingButtonProps {
   children: ReactNode;
   isLoading?: boolean;
   loadingText?: string;
-  onClick?: () => void;
   type?: 'button' | 'submit' | 'reset';
-  disabled?: boolean;
   className?: string;
-  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
+  disabled?: boolean;
+  onClick?: () => void;
 }
 
 const LoadingButton = ({ 
   children, 
   isLoading = false, 
   loadingText = 'Loading...', 
-  onClick,
   type = 'button',
-  disabled = false,
   className = '',
-  variant = 'default'
+  disabled = false,
+  onClick
 }: LoadingButtonProps) => {
   return (
     <Button
       type={type}
-      onClick={onClick}
       disabled={isLoading || disabled}
-      variant={variant}
-      className={`transition-all duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
-        isLoading ? 'cursor-not-allowed' : ''
-      } ${className}`}
+      className={className}
+      onClick={onClick}
     >
-      {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-      {isLoading ? loadingText : children}
+      {isLoading ? (
+        <>
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          {loadingText}
+        </>
+      ) : (
+        children
+      )}
     </Button>
   );
 };

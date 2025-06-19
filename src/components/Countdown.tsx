@@ -3,66 +3,48 @@ import { useState, useEffect } from 'react';
 
 const Countdown = () => {
   const [timeLeft, setTimeLeft] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
+    days: 45,
+    hours: 12,
+    minutes: 30,
     seconds: 0
   });
 
   useEffect(() => {
-    // Set target date to 30 days from now (you can adjust this)
-    const targetDate = new Date();
-    targetDate.setDate(targetDate.getDate() + 30);
-
     const timer = setInterval(() => {
-      const now = new Date().getTime();
-      const distance = targetDate.getTime() - now;
-
-      if (distance > 0) {
-        setTimeLeft({
-          days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-          minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-          seconds: Math.floor((distance % (1000 * 60)) / 1000)
-        });
-      } else {
-        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-      }
+      setTimeLeft(prev => {
+        if (prev.seconds > 0) {
+          return { ...prev, seconds: prev.seconds - 1 };
+        } else if (prev.minutes > 0) {
+          return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
+        } else if (prev.hours > 0) {
+          return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59 };
+        } else if (prev.days > 0) {
+          return { ...prev, days: prev.days - 1, hours: 23, minutes: 59, seconds: 59 };
+        }
+        return prev;
+      });
     }, 1000);
 
     return () => clearInterval(timer);
   }, []);
 
   return (
-    <div className="flex flex-col items-center space-y-6 animate-fade-in-up">
-      <h3 className="text-xl font-semibold text-primary animate-pulse-slow">
-        Launching In
-      </h3>
-      <div className="grid grid-cols-4 gap-4 text-center">
-        <div className="countdown-digit animate-scale-in" style={{ animationDelay: '0.1s' }}>
-          <div className="text-2xl md:text-3xl font-bold text-foreground animate-bounce-slow">
-            {timeLeft.days.toString().padStart(2, '0')}
-          </div>
-          <div className="text-xs text-muted-foreground font-medium">DAYS</div>
-        </div>
-        <div className="countdown-digit animate-scale-in" style={{ animationDelay: '0.2s' }}>
-          <div className="text-2xl md:text-3xl font-bold text-foreground animate-bounce-slow">
-            {timeLeft.hours.toString().padStart(2, '0')}
-          </div>
-          <div className="text-xs text-muted-foreground font-medium">HOURS</div>
-        </div>
-        <div className="countdown-digit animate-scale-in" style={{ animationDelay: '0.3s' }}>
-          <div className="text-2xl md:text-3xl font-bold text-foreground animate-bounce-slow">
-            {timeLeft.minutes.toString().padStart(2, '0')}
-          </div>
-          <div className="text-xs text-muted-foreground font-medium">MINS</div>
-        </div>
-        <div className="countdown-digit animate-scale-in" style={{ animationDelay: '0.4s' }}>
-          <div className="text-2xl md:text-3xl font-bold text-foreground animate-bounce-slow">
-            {timeLeft.seconds.toString().padStart(2, '0')}
-          </div>
-          <div className="text-xs text-muted-foreground font-medium">SECS</div>
-        </div>
+    <div className="flex flex-wrap gap-4 justify-center items-center">
+      <div className="countdown-digit">
+        <div className="text-3xl md:text-4xl font-bold text-primary">{timeLeft.days}</div>
+        <div className="text-sm text-muted-foreground">Days</div>
+      </div>
+      <div className="countdown-digit">
+        <div className="text-3xl md:text-4xl font-bold text-primary">{timeLeft.hours}</div>
+        <div className="text-sm text-muted-foreground">Hours</div>
+      </div>
+      <div className="countdown-digit">
+        <div className="text-3xl md:text-4xl font-bold text-primary">{timeLeft.minutes}</div>
+        <div className="text-sm text-muted-foreground">Minutes</div>
+      </div>
+      <div className="countdown-digit">
+        <div className="text-3xl md:text-4xl font-bold text-primary">{timeLeft.seconds}</div>
+        <div className="text-sm text-muted-foreground">Seconds</div>
       </div>
     </div>
   );

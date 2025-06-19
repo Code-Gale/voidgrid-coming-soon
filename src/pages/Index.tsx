@@ -366,14 +366,14 @@ const Index = () => {
       <AnimatedSection>
         <section className="py-20 border-t border-border bg-background/80" aria-label="Progress Demo">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 text-foreground">Loading Experience</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 text-foreground">Community Growth</h2>
             <div className="space-y-8">
               <div>
-                <h3 className="text-lg font-semibold mb-4 text-foreground">Deployment Progress</h3>
-                <ProgressBar progress={75} label="Building application..." />
+                <h3 className="text-lg font-semibold mb-4 text-foreground">Waitlist Progress</h3>
+                <ProgressBar current={2847} total={5000} label="Developers" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold mb-4 text-foreground">Loading Skeleton</h3>
+                <h3 className="text-lg font-semibold mb-4 text-foreground">Loading Experience</h3>
                 <LoadingSkeleton />
               </div>
             </div>

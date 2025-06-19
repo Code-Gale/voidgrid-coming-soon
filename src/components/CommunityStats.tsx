@@ -1,81 +1,37 @@
-import { useState, useEffect } from 'react';
-import { Users, Github, Twitter, Zap } from 'lucide-react';
 
-interface StatItem {
-  icon: React.ComponentType<{ className?: string }>;
-  value: number;
-  label: string;
-  suffix?: string;
-}
+import { Users, Star, GitBranch, Zap } from 'lucide-react';
+import AnimatedSection from './AnimatedSection';
 
 const CommunityStats = () => {
-  const [counts, setCounts] = useState([0, 0, 0, 0]);
-
-  const stats: StatItem[] = [
-    { icon: Users, value: 1247, label: 'Waitlist Members' },
-    { icon: Github, value: 892, label: 'GitHub Stars' },
-    { icon: Twitter, value: 2341, label: 'Twitter Followers' },
-    { icon: Zap, value: 156, label: 'Early Access', suffix: 'days' },
+  const stats = [
+    { icon: Users, label: 'Developers Joined', value: '2,847', color: 'text-blue-400' },
+    { icon: Star, label: 'GitHub Stars', value: '1,234', color: 'text-yellow-400' },
+    { icon: GitBranch, label: 'Projects Deployed', value: '892', color: 'text-green-400' },
+    { icon: Zap, label: 'Uptime', value: '99.9%', color: 'text-primary' }
   ];
 
-  useEffect(() => {
-    const animateCounts = () => {
-      const duration = 2000; // 2 seconds
-      const steps = 60;
-      const stepDuration = duration / steps;
-
-      let currentStep = 0;
-      const interval = setInterval(() => {
-        currentStep++;
-        const progress = currentStep / steps;
-        
-        const newCounts = stats.map(stat => 
-          Math.floor(stat.value * progress)
-        );
-        
-        setCounts(newCounts);
-
-        if (currentStep >= steps) {
-          clearInterval(interval);
-          setCounts(stats.map(stat => stat.value));
-        }
-      }, stepDuration);
-
-      return () => clearInterval(interval);
-    };
-
-    // Start animation after a short delay
-    const timer = setTimeout(animateCounts, 500);
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
-    <div className="py-12 bg-background/50">
+    <section className="py-20 border-t border-border bg-background/80" aria-label="Community Stats">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
+        <AnimatedSection>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-foreground">
             Join Our Growing Community
           </h2>
-          <p className="text-muted-foreground">
-            Developers worldwide are already waiting for VoidGrid
-          </p>
-        </div>
-        
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        </AnimatedSection>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((stat, index) => (
-            <div key={stat.label} className="text-center glass-card p-6 hover:glow-effect transition-all duration-300">
-              <stat.icon className="h-8 w-8 text-primary mx-auto mb-3" />
-              <div className="text-2xl md:text-3xl font-bold text-foreground mb-1">
-                {counts[index].toLocaleString()}
-                {stat.suffix && <span className="text-lg text-muted-foreground ml-1">{stat.suffix}</span>}
+            <AnimatedSection key={stat.label} delay={index * 100}>
+              <div className="glass-card p-6 text-center">
+                <stat.icon className={`h-8 w-8 mx-auto mb-4 ${stat.color}`} />
+                <div className={`text-2xl font-bold mb-2 ${stat.color}`}>{stat.value}</div>
+                <div className="text-sm text-muted-foreground">{stat.label}</div>
               </div>
-              <div className="text-sm text-muted-foreground">{stat.label}</div>
-            </div>
+            </AnimatedSection>
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
-export default CommunityStats; 
+export default CommunityStats;
