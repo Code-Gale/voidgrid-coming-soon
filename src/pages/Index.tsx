@@ -343,20 +343,26 @@ const Index = () => {
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-foreground">Interactive Experience</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <ThreeDCard
-                title="Lightning Fast"
-                description="Deploy in seconds with our optimized edge infrastructure."
-                icon="⚡"
-              />
+                className="p-8 text-center"
+              >
+                <div className="text-4xl mb-4">⚡</div>
+                <h3 className="text-xl font-bold mb-4 text-foreground">Lightning Fast</h3>
+                <p className="text-muted-foreground">Deploy in seconds with our optimized edge infrastructure.</p>
+              </ThreeDCard>
               <ThreeDCard
-                title="Developer First"
-                description="Built by developers, for developers. Git deploy, CLI, and more."
-                icon="👨‍💻"
-              />
+                className="p-8 text-center"
+              >
+                <div className="text-4xl mb-4">👨‍💻</div>
+                <h3 className="text-xl font-bold mb-4 text-foreground">Developer First</h3>
+                <p className="text-muted-foreground">Built by developers, for developers. Git deploy, CLI, and more.</p>
+              </ThreeDCard>
               <ThreeDCard
-                title="Scale Ready"
-                description="From prototype to production, scale seamlessly with zero downtime."
-                icon="🚀"
-              />
+                className="p-8 text-center"
+              >
+                <div className="text-4xl mb-4">🚀</div>
+                <h3 className="text-xl font-bold mb-4 text-foreground">Scale Ready</h3>
+                <p className="text-muted-foreground">From prototype to production, scale seamlessly with zero downtime.</p>
+              </ThreeDCard>
             </div>
           </div>
         </section>
