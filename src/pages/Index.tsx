@@ -16,11 +16,7 @@ import PricingCalculator from '@/components/PricingCalculator';
 import FeatureComparison from '@/components/FeatureComparison';
 import InteractiveTimeline from '@/components/InteractiveTimeline';
 import SocialSharing from '@/components/SocialSharing';
-import LeadScoring from '@/components/LeadScoring';
-import CommunityStats from '@/components/CommunityStats';
 import TypingAnimation from '@/components/TypingAnimation';
-import ProgressBar from '@/components/ProgressBar';
-import LoadingSkeleton from '@/components/LoadingSkeleton';
 import ThreeDCard from '@/components/3DCard';
 
 const waitlistSchema = z.object({
@@ -321,11 +317,6 @@ const Index = () => {
         <SocialSharing />
       </AnimatedSection>
 
-      {/* Lead Scoring Section */}
-      <AnimatedSection>
-        <LeadScoring />
-      </AnimatedSection>
-
       {/* Typing Animation Demo */}
       <AnimatedSection>
         <section className="py-20 border-t border-border bg-background/80" aria-label="Typing Demo">
@@ -363,25 +354,6 @@ const Index = () => {
                 <h3 className="text-xl font-bold mb-4 text-foreground">Scale Ready</h3>
                 <p className="text-muted-foreground">From prototype to production, scale seamlessly with zero downtime.</p>
               </ThreeDCard>
-            </div>
-          </div>
-        </section>
-      </AnimatedSection>
-
-      {/* Progress Bar Demo */}
-      <AnimatedSection>
-        <section className="py-20 border-t border-border bg-background/80" aria-label="Progress Demo">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 text-foreground">Community Growth</h2>
-            <div className="space-y-8">
-              <div>
-                <h3 className="text-lg font-semibold mb-4 text-foreground">Waitlist Progress</h3>
-                <ProgressBar current={2847} total={5000} label="Developers" />
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold mb-4 text-foreground">Loading Experience</h3>
-                <LoadingSkeleton />
-              </div>
             </div>
           </div>
         </section>
