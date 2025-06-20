@@ -292,11 +292,6 @@ const Index = () => {
         </section>
       </AnimatedSection>
 
-      {/* Community Stats Section */}
-      <AnimatedSection>
-        <CommunityStats />
-      </AnimatedSection>
-
       {/* Pricing Calculator Section */}
       <AnimatedSection>
         <PricingCalculator />
