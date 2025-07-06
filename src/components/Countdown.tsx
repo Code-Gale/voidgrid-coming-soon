@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 
 const Countdown = () => {
   const [timeLeft, setTimeLeft] = useState({
-    days: 45,
+    days: 89,
     hours: 12,
     minutes: 30,
     seconds: 0
